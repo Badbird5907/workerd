@@ -111,7 +111,7 @@ export function setGetRandomValues(func: typeof getRandomValuesType): void {
 }
 
 export function getRandomValues(Module: Module, arr: Uint8Array): Uint8Array {
-  return getRandomValuesInner(Module, arr);
+  return getRandomValuesInner(Module, arr as Uint8Array<ArrayBuffer>);
 }
 
 let lastTime: number;
@@ -237,8 +237,8 @@ function prepareStackTrace(
     return [false, ''];
   }
   try {
-    const funcName = stack[2].getFunctionName();
-    const fileName = stack[2].getFileName();
+    const funcName = stack[2]!.getFunctionName();
+    const fileName = stack[2]!.getFileName();
     if (fileName !== 'pyodideRuntime-internal:emscriptenSetup') {
       return [false, funcName];
     }
