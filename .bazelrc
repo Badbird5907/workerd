@@ -443,7 +443,11 @@ build:release_windows --per_file_copt="src/workerd/server/container-client"@/cla
 # Work around Windows test failures in rpc-related tests
 build:release_windows --per_file_copt=src/workerd/io/worker-interface@/clang:-fno-inline
 
-build:windows --cxxopt='/std:c++23preview' --host_cxxopt='/std:c++23preview'
+# NOTE (local dev fork): upstream uses '/std:c++23preview', an MSVC spelling only
+# understood by newer clang-cl (LLVM 20+). With the pinned LLVM 19 toolchain, clang-cl
+# ignores it and falls back to an older standard, breaking C++20/23 concepts. '/std:c++latest'
+# selects C++23 (== -std=c++23 used on Linux/macOS) and is understood by clang-cl 19.
+build:windows --cxxopt='/std:c++latest' --host_cxxopt='/std:c++latest'
 build:windows --copt='/D_CRT_USE_BUILTIN_OFFSETOF' --host_copt='/D_CRT_USE_BUILTIN_OFFSETOF'
 build:windows --copt='/DWIN32_LEAN_AND_MEAN' --host_copt='/DWIN32_LEAN_AND_MEAN'
 build:windows --copt='/EHs' --host_copt='/EHs'
